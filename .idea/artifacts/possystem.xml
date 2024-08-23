@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="possystem">
+    <output-path>$PROJECT_DIR$/out/artifacts/possystem</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="AAD-Assignment-Backend-API" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="AAD-Assignment-Backend-API/web/Web" />
+    </root>
+  </artifact>
+</component>
