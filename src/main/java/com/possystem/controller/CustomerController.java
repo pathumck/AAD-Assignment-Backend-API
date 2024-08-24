@@ -16,6 +16,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -47,5 +48,17 @@ public class CustomerController extends HttpServlet {
         }else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var id = req.getParameter("id");
+        Writer writer = resp.getWriter();
+        var data = new CustomerDataProcess();
+        var customer = data.getCustomer(id,connection);
+        resp.setContentType("application/json");
+        Jsonb jsonb = JsonbBuilder.create();
+        jsonb.toJson(customer,writer);
+        writer.close();
     }
 }
