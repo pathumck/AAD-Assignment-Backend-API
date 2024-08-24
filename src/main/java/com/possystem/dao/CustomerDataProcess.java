@@ -1,11 +1,12 @@
 package com.possystem.dao;
 
 import com.possystem.dto.CustomerDTO;
-import com.possystem.dto.ItemDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class CustomerDataProcess implements CustomerData {
 
@@ -13,6 +14,7 @@ public final class CustomerDataProcess implements CustomerData {
     private static final String GET_CUSTOMER = "SELECT * FROM customer WHERE id = ?";
     private static final String UPDATE_CUSTOMER = "UPDATE customer SET name = ?,address = ?,phone = ? WHERE id = ?";
     private static final String DELETE_CUSTOMER = "DELETE FROM customer WHERE id = ?";
+    private static final String GET_ALL = "SELECT * FROM customer";
 
     @Override
     public boolean saveCustomer(CustomerDTO customerDTO, Connection connection) {
@@ -77,5 +79,20 @@ public final class CustomerDataProcess implements CustomerData {
             e.printStackTrace();
             return false;
         }
+    }
+    @Override
+    public List<CustomerDTO> getAllCustomers(Connection connection) throws SQLException {
+        List<CustomerDTO> customers = new ArrayList<>();
+        var ps = connection.prepareStatement(GET_ALL);
+        var rs = ps.executeQuery();
+        while (rs.next()) {
+            CustomerDTO customer = new CustomerDTO();
+            customer.setId(rs.getString("id"));
+            customer.setName(rs.getString("name"));
+            customer.setAddress(rs.getString("address"));
+            customer.setPhone(rs.getString("phone"));
+            customers.add(customer);
+        }
+        return customers;
     }
 }

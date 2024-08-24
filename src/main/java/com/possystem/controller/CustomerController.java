@@ -53,14 +53,26 @@ public class CustomerController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var id = req.getParameter("id");
+        String id = req.getParameter("id");
         Writer writer = resp.getWriter();
         var data = new CustomerDataProcess();
-        var customer = data.getCustomer(id,connection);
-        resp.setContentType("application/json");
         Jsonb jsonb = JsonbBuilder.create();
-        jsonb.toJson(customer,writer);
-        writer.close();
+        resp.setContentType("application/json");
+
+        try {
+            if (id != null) {
+                var customer = data.getCustomer(id, connection);
+                jsonb.toJson(customer, writer);
+            } else {
+                var customers = data.getAllCustomers(connection);
+                jsonb.toJson(customers, writer);
+            }
+        } catch (SQLException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
+            e.printStackTrace();
+        } finally {
+            writer.close();
+        }
     }
 
     @Override
