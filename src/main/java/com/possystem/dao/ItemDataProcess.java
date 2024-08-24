@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 public final class ItemDataProcess implements ItemData {
     private static final String SAVE_ITEM = "INSERT INTO item (id,name,price,qty) VALUES (?,?,?,?)";
+    private static final String GET_ITEM = "SELECT * FROM item WHERE id = ?";
 
     @Override
     public boolean saveItem(ItemDTO itemDTO, Connection connection) {
@@ -22,5 +23,26 @@ public final class ItemDataProcess implements ItemData {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public ItemDTO getItem(String id, Connection connection) {
+        ItemDTO itemDTO = null;
+
+        try {
+            var ps = connection.prepareStatement(GET_ITEM);
+            ps.setString(1, id);
+            var rs = ps.executeQuery();
+            if (rs.next()) {
+                itemDTO = new ItemDTO();
+                itemDTO.setId(rs.getString("id"));
+                itemDTO.setName(rs.getString("name"));
+                itemDTO.setPrice(rs.getDouble("price"));
+                itemDTO.setQty(rs.getInt("qty"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return itemDTO;
     }
 }
