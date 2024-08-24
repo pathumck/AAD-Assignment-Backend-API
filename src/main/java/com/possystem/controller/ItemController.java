@@ -4,6 +4,7 @@ import com.possystem.dao.ItemDataProcess;
 import com.possystem.dto.ItemDTO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -57,5 +58,27 @@ public class ItemController extends HttpServlet {
         Jsonb jsonb = JsonbBuilder.create();
         jsonb.toJson(item,writer);
         writer.close();
+    }
+
+    @Override
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (!req.getContentType().toLowerCase().startsWith("application/json")||req.getContentType()==null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        try(var writer = resp.getWriter()) {
+            var id = req.getParameter("id");
+            Jsonb jsonb = JsonbBuilder.create();
+            var data = new ItemDataProcess();
+            var item = jsonb.fromJson(req.getReader(), ItemDTO.class);
+            if (data.updateItem(id,item,connection)) {
+                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            }else {
+                writer.write("Update failed");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }catch (JsonbException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+        }
     }
 }
