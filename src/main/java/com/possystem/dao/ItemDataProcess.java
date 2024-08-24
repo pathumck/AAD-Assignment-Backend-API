@@ -5,12 +5,15 @@ import com.possystem.dto.ItemDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ItemDataProcess implements ItemData {
     private static final String SAVE_ITEM = "INSERT INTO item (id,name,price,qty) VALUES (?,?,?,?)";
     private static final String GET_ITEM = "SELECT * FROM item WHERE id = ?";
     private static final String UPDATE_ITEM = "UPDATE item SET name = ?,price = ?,qty = ? WHERE id = ?";
     private static final String DELETE_ITEM = "DELETE FROM item WHERE id = ?";
+    private static final String GET_ALL = "SELECT * FROM item";
 
     @Override
     public boolean saveItem(ItemDTO itemDTO, Connection connection) {
@@ -75,5 +78,21 @@ public final class ItemDataProcess implements ItemData {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<ItemDTO> getAllItems(Connection connection) throws SQLException {
+        List<ItemDTO> items = new ArrayList<>();
+        var ps = connection.prepareStatement(GET_ALL);
+        var rs = ps.executeQuery();
+        while (rs.next()) {
+            ItemDTO item = new ItemDTO();
+            item.setId(rs.getString("id"));
+            item.setName(rs.getString("name"));
+            item.setPrice(rs.getDouble("price"));
+            item.setQty(rs.getInt("qty"));
+            items.add(item);
+        }
+        return items;
     }
 }

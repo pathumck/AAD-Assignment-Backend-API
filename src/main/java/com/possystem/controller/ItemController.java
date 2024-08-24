@@ -1,5 +1,6 @@
 package com.possystem.controller;
 
+import com.possystem.dao.CustomerDataProcess;
 import com.possystem.dao.ItemDataProcess;
 import com.possystem.dto.ItemDTO;
 import jakarta.json.bind.Jsonb;
@@ -50,14 +51,26 @@ public class ItemController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var id = req.getParameter("id");
+        String id = req.getParameter("id");
         Writer writer = resp.getWriter();
         var data = new ItemDataProcess();
-        var item = data.getItem(id,connection);
-        resp.setContentType("application/json");
         Jsonb jsonb = JsonbBuilder.create();
-        jsonb.toJson(item,writer);
-        writer.close();
+        resp.setContentType("application/json");
+
+        try {
+            if (id != null) {
+                var item = data.getItem(id, connection);
+                jsonb.toJson(item, writer);
+            } else {
+                var items = data.getAllItems(connection);
+                jsonb.toJson(items, writer);
+            }
+        } catch (SQLException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
+            e.printStackTrace();
+        } finally {
+            writer.close();
+        }
     }
 
     @Override
