@@ -11,6 +11,7 @@ public final class CustomerDataProcess implements CustomerData {
 
     private static final String SAVE_CUSTOMER = "INSERT INTO customer (id,name,address,phone) VALUES (?,?,?,?)";
     private static final String GET_CUSTOMER = "SELECT * FROM customer WHERE id = ?";
+    private static final String UPDATE_CUSTOMER = "UPDATE customer SET name = ?,address = ?,phone = ? WHERE id = ?";
 
     @Override
     public boolean saveCustomer(CustomerDTO customerDTO, Connection connection) {
@@ -46,5 +47,21 @@ public final class CustomerDataProcess implements CustomerData {
             e.printStackTrace();
         }
         return customerDTO;
+    }
+
+    @Override
+    public boolean updateCustomer(String id, CustomerDTO customerDTO, Connection connection) {
+        try {
+            var ps = connection.prepareStatement(UPDATE_CUSTOMER);
+            ps.setString(1, customerDTO.getName());
+            ps.setString(2, customerDTO.getAddress());
+            ps.setString(3, customerDTO.getPhone());
+            ps.setString(4, id);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

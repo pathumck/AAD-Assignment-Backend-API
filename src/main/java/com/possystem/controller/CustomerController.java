@@ -6,6 +6,7 @@ import com.possystem.dto.CustomerDTO;
 import com.possystem.dto.ItemDTO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -60,5 +61,27 @@ public class CustomerController extends HttpServlet {
         Jsonb jsonb = JsonbBuilder.create();
         jsonb.toJson(customer,writer);
         writer.close();
+    }
+
+    @Override
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (!req.getContentType().toLowerCase().startsWith("application/json")||req.getContentType()==null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        try(var writer = resp.getWriter()) {
+            var id = req.getParameter("id");
+            Jsonb jsonb = JsonbBuilder.create();
+            var data = new CustomerDataProcess();
+            var customer = jsonb.fromJson(req.getReader(), CustomerDTO.class);
+            if (data.updateCustomer(id,customer,connection)) {
+                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            }else {
+                writer.write("Update failed");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }catch (JsonbException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+        }
     }
 }
