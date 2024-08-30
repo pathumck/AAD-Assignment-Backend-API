@@ -1,8 +1,6 @@
 package com.possystem.controller;
 
-import com.possystem.dao.ItemData;
-import com.possystem.dao.ItemDataProcess;
-import com.possystem.dao.OrderDataProcess;
+import com.possystem.dao.*;
 import com.possystem.dto.PlaceOrderDTO;
 import com.possystem.entity.Order;
 import jakarta.json.bind.Jsonb;
@@ -61,6 +59,12 @@ public class OrderController extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_CREATED);
         } else {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
+        OrderDetailDataProcess data2 = new OrderDetailDataProcess();
+        boolean isOrderDetailsSaved = data2.saveOrderDetails(placeOrderDTO.get_orderId(),placeOrderDTO.get_cartTmList(),connection);
+        if (isOrderDetailsSaved) {
+
         }
     }
 }
