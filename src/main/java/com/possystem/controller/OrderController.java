@@ -1,5 +1,7 @@
 package com.possystem.controller;
 
+import com.possystem.dao.ItemData;
+import com.possystem.dao.ItemDataProcess;
 import com.possystem.dao.OrderDataProcess;
 import com.possystem.dto.PlaceOrderDTO;
 import com.possystem.entity.Order;
@@ -50,6 +52,15 @@ public class OrderController extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_CREATED);
         } else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        ItemData data1 = new ItemDataProcess();
+        boolean isItemsQtyUpdated = data1.updateItemQtys(placeOrderDTO.get_cartTmList(),connection);
+
+        if (isItemsQtyUpdated) {
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+        } else {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

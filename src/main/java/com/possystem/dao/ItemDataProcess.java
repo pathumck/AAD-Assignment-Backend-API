@@ -1,6 +1,7 @@
 package com.possystem.dao;
 
 import com.possystem.dto.ItemDTO;
+import com.possystem.dto.tm.CartTM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ public final class ItemDataProcess implements ItemData {
     private static final String UPDATE_ITEM = "UPDATE item SET name = ?,price = ?,qty = ? WHERE id = ?";
     private static final String DELETE_ITEM = "DELETE FROM item WHERE id = ?";
     private static final String GET_ALL = "SELECT * FROM item";
+    private static final String UPDATE_QTY = "UPDATE item SET qty = qty - ? WHERE id = ?";
 
     @Override
     public boolean saveItem(ItemDTO itemDTO, Connection connection) {
@@ -94,5 +96,28 @@ public final class ItemDataProcess implements ItemData {
             items.add(item);
         }
         return items;
+    }
+
+    @Override
+    public boolean updateItemQtys(List<CartTM> cartTmList, Connection connection) {
+        boolean allUpdated = true;
+        PreparedStatement ps = null;
+        try {
+            for (CartTM cartTM : cartTmList) {
+                ps = connection.prepareStatement(UPDATE_QTY);
+                ps.setInt(1, cartTM.get_qty());
+                ps.setString(2, cartTM.get_code());
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected == 0) {
+                    allUpdated = false;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            allUpdated = false;
+        }
+        return allUpdated;
     }
 }
