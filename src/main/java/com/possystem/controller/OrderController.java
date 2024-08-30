@@ -33,38 +33,69 @@ public class OrderController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!req.getContentType().toLowerCase().startsWith("application/json") || req.getContentType() == null) {
+        if (req.getContentType() == null || !req.getContentType().toLowerCase().startsWith("application/json")) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        Jsonb jsonb = JsonbBuilder.create();
-        PlaceOrderDTO placeOrderDTO = jsonb.fromJson(req.getReader(), PlaceOrderDTO.class);
+        try {
+            connection.setAutoCommit(false);
 
-        Order order = new Order(placeOrderDTO.get_orderId(),placeOrderDTO.get_date(),placeOrderDTO.get_cusId(),placeOrderDTO.get_total());
+            Jsonb jsonb = JsonbBuilder.create();
+            PlaceOrderDTO placeOrderDTO = jsonb.fromJson(req.getReader(), PlaceOrderDTO.class);
 
-        OrderDataProcess data = new OrderDataProcess();
-        boolean isOrderSaved = data.saveOrder(order, connection);
+            Order order = new Order(placeOrderDTO.get_orderId(), placeOrderDTO.get_date(), placeOrderDTO.get_cusId(), placeOrderDTO.get_total());
 
-        if (isOrderSaved) {
+            OrderDataProcess orderData = new OrderDataProcess();
+            boolean isOrderSaved = orderData.saveOrder(order, connection);
+
+            if (!isOrderSaved) {
+                connection.rollback();
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+
+            ItemData itemData = new ItemDataProcess();
+            boolean isItemsQtyUpdated = itemData.updateItemQtys(placeOrderDTO.get_cartTmList(), connection);
+
+            if (!isItemsQtyUpdated) {
+                connection.rollback();
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+
+            OrderDetailDataProcess orderDetailData = new OrderDetailDataProcess();
+            boolean isOrderDetailsSaved = orderDetailData.saveOrderDetails(placeOrderDTO.get_orderId(), placeOrderDTO.get_cartTmList(), connection);
+
+            if (!isOrderDetailsSaved) {
+                connection.rollback();
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+
+            connection.commit();
             resp.setStatus(HttpServletResponse.SC_CREATED);
-        } else {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
 
-        ItemData data1 = new ItemDataProcess();
-        boolean isItemsQtyUpdated = data1.updateItemQtys(placeOrderDTO.get_cartTmList(),connection);
-
-        if (isItemsQtyUpdated) {
-            resp.setStatus(HttpServletResponse.SC_CREATED);
-        } else {
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-
-        OrderDetailDataProcess data2 = new OrderDetailDataProcess();
-        boolean isOrderDetailsSaved = data2.saveOrderDetails(placeOrderDTO.get_orderId(),placeOrderDTO.get_cartTmList(),connection);
-        if (isOrderDetailsSaved) {
-
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
+
 }
