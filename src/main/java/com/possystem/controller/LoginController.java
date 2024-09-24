@@ -1,5 +1,8 @@
 package com.possystem.controller;
 
+import com.possystem.bo.LoginBO;
+import com.possystem.bo.LoginBOImpl;
+import com.possystem.dao.LoginData;
 import com.possystem.dao.LoginDataProcess;
 import com.possystem.dto.LoginDTO;
 import jakarta.servlet.ServletException;
@@ -19,6 +22,8 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/login", loadOnStartup = 2)
 public class LoginController extends HttpServlet {
     Connection connection;
+    LoginBO loginBO = new LoginBOImpl();
+
     @Override
     public void init() throws ServletException {
         try {
@@ -38,9 +43,8 @@ public class LoginController extends HttpServlet {
         LoginDTO loginDTO = new LoginDTO(name, password);
 
         try (Writer writer = resp.getWriter()) {
-            var data = new LoginDataProcess();
 
-            if(data.checkCredentials(loginDTO, connection)) {
+            if(loginBO.checkCredentials(loginDTO, connection)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 writer.write("Login Successful");
             } else {
