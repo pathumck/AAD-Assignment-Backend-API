@@ -71,7 +71,7 @@ public final class ItemDataProcess implements ItemData {
     }
 
     @Override
-    public boolean deleteItem(String id, Connection connection) {
+    public boolean delete(String id, Connection connection) {
         try {
             var ps = connection.prepareStatement(DELETE_ITEM);
             ps.setString(1, id);

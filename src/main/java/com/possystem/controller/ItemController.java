@@ -101,8 +101,7 @@ public class ItemController extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var id = req.getParameter("id");
         try(var writer = resp.getWriter()) {
-            var data = new ItemDataProcess();
-            if(data.deleteItem(id,connection)){
+            if(itemBO.deleteItem(id,connection)){
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             }else {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);

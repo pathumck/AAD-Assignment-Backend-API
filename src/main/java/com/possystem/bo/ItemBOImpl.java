@@ -25,7 +25,7 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public boolean deleteItem(String id, Connection connection) {
-        return false;
+        return itemData.delete(id, connection);
     }
 
     @Override
