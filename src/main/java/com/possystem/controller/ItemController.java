@@ -1,5 +1,7 @@
 package com.possystem.controller;
 
+import com.possystem.bo.ItemBO;
+import com.possystem.bo.ItemBOImpl;
 import com.possystem.dao.CustomerDataProcess;
 import com.possystem.dao.ItemDataProcess;
 import com.possystem.dto.ItemDTO;
@@ -23,6 +25,8 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/item",loadOnStartup = 2)
 public class ItemController extends HttpServlet {
     Connection connection;
+    ItemBO itemBO = new ItemBOImpl();
+
     @Override
     public void init() throws ServletException {
         try {
@@ -41,8 +45,7 @@ public class ItemController extends HttpServlet {
         }
         Jsonb jsonb = JsonbBuilder.create();
         ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
-        var saveData = new ItemDataProcess();
-        if (saveData.saveItem(itemDTO,connection)) {
+        if (itemBO.saveItem(itemDTO,connection)) {
             resp.setStatus(HttpServletResponse.SC_CREATED);
         }else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
