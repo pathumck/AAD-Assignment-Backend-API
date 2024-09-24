@@ -33,24 +33,24 @@ public final class CustomerDataProcess implements CustomerData {
     }
 
     @Override
-    public CustomerDTO getCustomer(String id, Connection connection) {
-        CustomerDTO customerDTO = null;
+    public Customer select(String id, Connection connection) {
+        Customer customer = null;
 
         try {
             var ps = connection.prepareStatement(GET_CUSTOMER);
             ps.setString(1, id);
             var rs = ps.executeQuery();
             if (rs.next()) {
-                customerDTO = new CustomerDTO();
-                customerDTO.setId(rs.getString("id"));
-                customerDTO.setName(rs.getString("name"));
-                customerDTO.setAddress(rs.getString("address"));
-                customerDTO.setPhone(rs.getString("phone"));
+                customer = new Customer();
+                customer.setId(rs.getString("id"));
+                customer.setName(rs.getString("name"));
+                customer.setAddress(rs.getString("address"));
+                customer.setPhone(rs.getString("phone"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return customerDTO;
+        return customer;
     }
 
     @Override
@@ -82,12 +82,12 @@ public final class CustomerDataProcess implements CustomerData {
         }
     }
     @Override
-    public List<CustomerDTO> getAllCustomers(Connection connection) throws SQLException {
-        List<CustomerDTO> customers = new ArrayList<>();
+    public List<Customer> selectAll(Connection connection) throws SQLException {
+        List<Customer> customers = new ArrayList<>();
         var ps = connection.prepareStatement(GET_ALL);
         var rs = ps.executeQuery();
         while (rs.next()) {
-            CustomerDTO customer = new CustomerDTO();
+            Customer customer = new Customer();
             customer.setId(rs.getString("id"));
             customer.setName(rs.getString("name"));
             customer.setAddress(rs.getString("address"));

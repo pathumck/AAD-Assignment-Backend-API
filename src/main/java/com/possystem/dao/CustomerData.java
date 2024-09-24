@@ -10,8 +10,8 @@ import java.util.List;
 
 public sealed interface CustomerData permits CustomerDataProcess {
     boolean save(Customer customer, Connection connection);
-    CustomerDTO getCustomer(String id, Connection connection);
+    Customer select(String id, Connection connection);
     boolean update(String id, Customer customer, Connection connection);
     boolean delete(String id, Connection connection);
-    List<CustomerDTO> getAllCustomers(Connection connection) throws SQLException;
+    List<Customer> selectAll(Connection connection) throws SQLException;
 }

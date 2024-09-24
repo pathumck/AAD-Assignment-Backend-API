@@ -57,16 +57,15 @@ public class CustomerController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         Writer writer = resp.getWriter();
-        var data = new CustomerDataProcess();
         Jsonb jsonb = JsonbBuilder.create();
         resp.setContentType("application/json");
 
         try {
             if (id != null) {
-                var customer = data.getCustomer(id, connection);
+                var customer = customerBO.selectCustomer(id, connection);
                 jsonb.toJson(customer, writer);
             } else {
-                var customers = data.getAllCustomers(connection);
+                var customers = customerBO.getAllCustomers(connection);
                 jsonb.toJson(customers, writer);
             }
         } catch (SQLException e) {
