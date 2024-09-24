@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public sealed interface CustomerData permits CustomerDataProcess {
-    boolean saveCustomer(Customer customer, Connection connection);
+    boolean save(Customer customer, Connection connection);
     CustomerDTO getCustomer(String id, Connection connection);
     boolean updateCustomer(String id, CustomerDTO customerDTO, Connection connection);
     boolean deleteCustomer(String id, Connection connection);

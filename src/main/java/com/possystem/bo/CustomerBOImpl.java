@@ -14,7 +14,7 @@ public class CustomerBOImpl implements CustomerBO {
     @Override
     public boolean saveCustomer(CustomerDTO customerDTO, Connection connection) {
         Customer customer = new Customer(customerDTO.getId(), customerDTO.getName(), customerDTO.getAddress(), customerDTO.getPhone());
-        return customerData.saveCustomer(customer,connection);
+        return customerData.save(customer,connection);
     }
 
     @Override

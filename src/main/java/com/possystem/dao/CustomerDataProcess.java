@@ -18,7 +18,7 @@ public final class CustomerDataProcess implements CustomerData {
     private static final String GET_ALL = "SELECT * FROM customer";
 
     @Override
-    public boolean saveCustomer(Customer customer, Connection connection) {
+    public boolean save(Customer customer, Connection connection) {
         try(PreparedStatement ps = connection.prepareStatement(SAVE_CUSTOMER)) {
             ps.setString(1, customer.getId());
             ps.setString(2, customer.getName());
