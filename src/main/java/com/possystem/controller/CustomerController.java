@@ -1,5 +1,7 @@
 package com.possystem.controller;
 
+import com.possystem.bo.CustomerBO;
+import com.possystem.bo.CustomerBOImpl;
 import com.possystem.dao.CustomerDataProcess;
 import com.possystem.dao.ItemDataProcess;
 import com.possystem.dto.CustomerDTO;
@@ -24,6 +26,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/customer", loadOnStartup = 2)
 public class CustomerController extends HttpServlet {
     Connection connection = null;
+    CustomerBO customerBO = new CustomerBOImpl();
 
     @Override
     public void init() throws ServletException {
@@ -43,8 +46,7 @@ public class CustomerController extends HttpServlet {
         }
         Jsonb jsonb = JsonbBuilder.create();
         CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
-        var saveData = new CustomerDataProcess();
-        if (saveData.saveCustomer(customerDTO,connection)) {
+        if (customerBO.saveCustomer(customerDTO,connection)) {
             resp.setStatus(HttpServletResponse.SC_CREATED);
         }else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

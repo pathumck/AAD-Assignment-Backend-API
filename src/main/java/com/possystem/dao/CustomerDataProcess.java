@@ -1,6 +1,7 @@
 package com.possystem.dao;
 
 import com.possystem.dto.CustomerDTO;
+import com.possystem.entity.Customer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,12 +18,12 @@ public final class CustomerDataProcess implements CustomerData {
     private static final String GET_ALL = "SELECT * FROM customer";
 
     @Override
-    public boolean saveCustomer(CustomerDTO customerDTO, Connection connection) {
+    public boolean saveCustomer(Customer customer, Connection connection) {
         try(PreparedStatement ps = connection.prepareStatement(SAVE_CUSTOMER)) {
-            ps.setString(1, customerDTO.getId());
-            ps.setString(2, customerDTO.getName());
-            ps.setString(3, customerDTO.getAddress());
-            ps.setString(4, customerDTO.getPhone());
+            ps.setString(1, customer.getId());
+            ps.setString(2, customer.getName());
+            ps.setString(3, customer.getAddress());
+            ps.setString(4, customer.getPhone());
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
