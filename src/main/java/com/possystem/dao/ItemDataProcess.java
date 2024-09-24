@@ -100,14 +100,14 @@ public final class ItemDataProcess implements ItemData {
     }
 
     @Override
-    public boolean updateItemQtys(List<CartTM> cartTmList, Connection connection) {
+    public boolean updateItemQtys(List<Item> itemList, Connection connection) {
         boolean allUpdated = true;
         PreparedStatement ps = null;
         try {
-            for (CartTM cartTM : cartTmList) {
+            for (Item item : itemList) {
                 ps = connection.prepareStatement(UPDATE_QTY);
-                ps.setInt(1, cartTM.get_qty());
-                ps.setString(2, cartTM.get_code());
+                ps.setInt(1, item.getQty());
+                ps.setString(2, item.getId());
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected == 0) {

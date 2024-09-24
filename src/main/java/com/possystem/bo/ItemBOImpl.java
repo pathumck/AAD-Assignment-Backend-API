@@ -3,6 +3,7 @@ package com.possystem.bo;
 import com.possystem.dao.ItemData;
 import com.possystem.dao.ItemDataProcess;
 import com.possystem.dto.ItemDTO;
+import com.possystem.dto.tm.CartTM;
 import com.possystem.entity.Item;
 
 import java.sql.Connection;
@@ -44,5 +45,17 @@ public class ItemBOImpl implements ItemBO {
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
+    }
+
+    @Override
+    public boolean updateItemQtys(List<CartTM> cartTmList, Connection connection) {
+        List<Item> itemList = new ArrayList<>();
+        for (CartTM cartTM : cartTmList) {
+            Item item = new Item();
+            item.setId(cartTM.get_code());
+            item.setQty(cartTM.get_qty());
+            itemList.add(item);
+        }
+        return itemData.updateItemQtys(itemList, connection);
     }
 }

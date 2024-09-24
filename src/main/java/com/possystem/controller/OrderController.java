@@ -1,5 +1,6 @@
 package com.possystem.controller;
 
+import com.possystem.bo.*;
 import com.possystem.dao.*;
 import com.possystem.dto.PlaceOrderDTO;
 import com.possystem.entity.Order;
@@ -21,6 +22,10 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/order", loadOnStartup = 2)
 public class OrderController extends HttpServlet {
     Connection connection;
+    OrderBO orderBO = new OrderBOImpl();
+    ItemBO itemBO = new ItemBOImpl();
+    OrderDetailBO orderDetailBO = new OrderDetailBOImpl();
+
     @Override
     public void init() throws ServletException {
         try {
@@ -44,10 +49,7 @@ public class OrderController extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             PlaceOrderDTO placeOrderDTO = jsonb.fromJson(req.getReader(), PlaceOrderDTO.class);
 
-            Order order = new Order(placeOrderDTO.get_orderId(), placeOrderDTO.get_date(), placeOrderDTO.get_cusId(), placeOrderDTO.get_total());
-
-            OrderDataProcess orderData = new OrderDataProcess();
-            boolean isOrderSaved = orderData.saveOrder(order, connection);
+            boolean isOrderSaved = orderBO.saveOrder(placeOrderDTO, connection);
 
             if (!isOrderSaved) {
                 connection.rollback();
@@ -55,17 +57,14 @@ public class OrderController extends HttpServlet {
                 return;
             }
 
-            ItemData itemData = new ItemDataProcess();
-            boolean isItemsQtyUpdated = itemData.updateItemQtys(placeOrderDTO.get_cartTmList(), connection);
-
+            boolean isItemsQtyUpdated = itemBO.updateItemQtys(placeOrderDTO.get_cartTmList(), connection);
             if (!isItemsQtyUpdated) {
                 connection.rollback();
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
 
-            OrderDetailDataProcess orderDetailData = new OrderDetailDataProcess();
-            boolean isOrderDetailsSaved = orderDetailData.saveOrderDetails(placeOrderDTO.get_orderId(), placeOrderDTO.get_cartTmList(), connection);
+            boolean isOrderDetailsSaved = orderDetailBO.saveOrderDetails(placeOrderDTO.get_orderId(), placeOrderDTO.get_cartTmList(), connection);
 
             if (!isOrderDetailsSaved) {
                 connection.rollback();
@@ -97,5 +96,4 @@ public class OrderController extends HttpServlet {
             }
         }
     }
-
 }

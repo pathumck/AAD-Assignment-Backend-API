@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public final class OrderDataProcess implements OrderData {
     private static final String SAVE_ORDER = "INSERT INTO Orders (id, date, customerId, total) VALUES (?, ?, ?, ?)";
     @Override
-    public boolean saveOrder(Order order, Connection connection) {
+    public boolean save(Order order, Connection connection) {
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_ORDER);
             ps.setString(1, order.getId());

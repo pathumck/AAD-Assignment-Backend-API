@@ -14,5 +14,5 @@ public sealed interface ItemData permits ItemDataProcess {
     boolean update(String id, Item item, Connection connection);
     boolean delete(String id, Connection connection);
     List<Item> selectAll(Connection connection) throws SQLException;
-    boolean updateItemQtys(List<CartTM> cartTmList, Connection connection);
+    boolean updateItemQtys(List<Item> itemList, Connection connection);
 }

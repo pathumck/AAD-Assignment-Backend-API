@@ -1,6 +1,7 @@
 package com.possystem.dao;
 
 import com.possystem.dto.tm.CartTM;
+import com.possystem.entity.OrderDetail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,17 +11,17 @@ import java.util.List;
 public final class OrderDetailDataProcess implements OrderDetailData{
     private static final String SAVE_ORDER_DETAILS = "INSERT INTO orderdetail (orderId, itemId, quantity, price, totalPrice) VALUES (?, ?, ?, ?, ?)";
     @Override
-    public boolean saveOrderDetails(String orderId, List<CartTM> cartTmList, Connection connection) {
+    public boolean save(List<OrderDetail> orderDetailList, Connection connection) {
         boolean allUpdated = true;
         PreparedStatement ps = null;
         try {
-            for (CartTM cartTM : cartTmList) {
+            for (OrderDetail orderDetail : orderDetailList) {
                 ps = connection.prepareStatement(SAVE_ORDER_DETAILS);
-                ps.setString(1, orderId);
-                ps.setString(2, cartTM.get_code());
-                ps.setInt(3, cartTM.get_qty());
-                ps.setDouble(4, cartTM.get_price());
-                ps.setDouble(5, cartTM.get_total());
+                ps.setString(1, orderDetail.getOrderId());
+                ps.setString(2, orderDetail.getItemId());
+                ps.setInt(3, orderDetail.getQty());
+                ps.setDouble(4, orderDetail.getPrice());
+                ps.setDouble(5, orderDetail.getTotal());
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected == 0) {
                     allUpdated = false;
