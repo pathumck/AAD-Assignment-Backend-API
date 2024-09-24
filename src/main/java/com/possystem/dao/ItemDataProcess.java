@@ -34,24 +34,24 @@ public final class ItemDataProcess implements ItemData {
     }
 
     @Override
-    public ItemDTO getItem(String id, Connection connection) {
-        ItemDTO itemDTO = null;
+    public Item select(String id, Connection connection) {
+        Item item = null;
 
         try {
             var ps = connection.prepareStatement(GET_ITEM);
             ps.setString(1, id);
             var rs = ps.executeQuery();
             if (rs.next()) {
-                itemDTO = new ItemDTO();
-                itemDTO.setId(rs.getString("id"));
-                itemDTO.setName(rs.getString("name"));
-                itemDTO.setPrice(rs.getDouble("price"));
-                itemDTO.setQty(rs.getInt("qty"));
+                item = new Item();
+                item.setId(rs.getString("id"));
+                item.setName(rs.getString("name"));
+                item.setPrice(rs.getDouble("price"));
+                item.setQty(rs.getInt("qty"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return itemDTO;
+        return item;
     }
 
     @Override
@@ -84,12 +84,12 @@ public final class ItemDataProcess implements ItemData {
     }
 
     @Override
-    public List<ItemDTO> getAllItems(Connection connection) throws SQLException {
-        List<ItemDTO> items = new ArrayList<>();
+    public List<Item> selectAll(Connection connection) throws SQLException {
+        List<Item> items = new ArrayList<>();
         var ps = connection.prepareStatement(GET_ALL);
         var rs = ps.executeQuery();
         while (rs.next()) {
-            ItemDTO item = new ItemDTO();
+            Item item = new Item();
             item.setId(rs.getString("id"));
             item.setName(rs.getString("name"));
             item.setPrice(rs.getDouble("price"));

@@ -7,6 +7,7 @@ import com.possystem.entity.Item;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemBOImpl implements ItemBO {
@@ -30,11 +31,18 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public ItemDTO selectItem(String id, Connection connection) {
-        return null;
+        Item item = itemData.select(id, connection);
+        return new ItemDTO(item.getId(), item.getName(), item.getPrice(), item.getQty());
     }
 
     @Override
-    public List<ItemDTO> getAllItems(Connection connection) throws SQLException {
-        return null;
+    public List<ItemDTO> selectAllItems(Connection connection) throws SQLException {
+        List<Item> itemList = itemData.selectAll(connection);
+        List<ItemDTO> itemDTOList = new ArrayList<>();
+        for (Item item : itemList) {
+            ItemDTO itemDTO = new ItemDTO(item.getId(), item.getName(), item.getPrice(), item.getQty());
+            itemDTOList.add(itemDTO);
+        }
+        return itemDTOList;
     }
 }

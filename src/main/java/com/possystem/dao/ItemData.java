@@ -10,9 +10,9 @@ import java.util.List;
 
 public sealed interface ItemData permits ItemDataProcess {
     boolean save(Item item, Connection connection);
-    ItemDTO getItem(String id, Connection connection);
+    Item select(String id, Connection connection);
     boolean update(String id, Item item, Connection connection);
     boolean delete(String id, Connection connection);
-    List<ItemDTO> getAllItems(Connection connection) throws SQLException;
+    List<Item> selectAll(Connection connection) throws SQLException;
     boolean updateItemQtys(List<CartTM> cartTmList, Connection connection);
 }

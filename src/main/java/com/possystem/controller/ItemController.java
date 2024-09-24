@@ -56,16 +56,15 @@ public class ItemController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         Writer writer = resp.getWriter();
-        var data = new ItemDataProcess();
         Jsonb jsonb = JsonbBuilder.create();
         resp.setContentType("application/json");
 
         try {
             if (id != null) {
-                var item = data.getItem(id, connection);
+                var item = itemBO.selectItem(id, connection);
                 jsonb.toJson(item, writer);
             } else {
-                var items = data.getAllItems(connection);
+                var items = itemBO.selectAllItems(connection);
                 jsonb.toJson(items, writer);
             }
         } catch (SQLException e) {
