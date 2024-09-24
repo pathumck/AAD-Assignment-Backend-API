@@ -55,12 +55,12 @@ public final class ItemDataProcess implements ItemData {
     }
 
     @Override
-    public boolean updateItem(String id,ItemDTO itemDTO, Connection connection) {
+    public boolean update(String id,Item item, Connection connection) {
         try {
             var ps = connection.prepareStatement(UPDATE_ITEM);
-            ps.setString(1, itemDTO.getName());
-            ps.setDouble(2, itemDTO.getPrice());
-            ps.setInt(3, itemDTO.getQty());
+            ps.setString(1, item.getName());
+            ps.setDouble(2, item.getPrice());
+            ps.setInt(3, item.getQty());
             ps.setString(4, id);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;

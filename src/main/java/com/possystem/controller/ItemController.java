@@ -84,9 +84,8 @@ public class ItemController extends HttpServlet {
         try(var writer = resp.getWriter()) {
             var id = req.getParameter("id");
             Jsonb jsonb = JsonbBuilder.create();
-            var data = new ItemDataProcess();
             var item = jsonb.fromJson(req.getReader(), ItemDTO.class);
-            if (data.updateItem(id,item,connection)) {
+            if (itemBO.updateItem(id,item,connection)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             }else {
                 writer.write("Update failed");

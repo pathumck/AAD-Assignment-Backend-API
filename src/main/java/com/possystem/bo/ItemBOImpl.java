@@ -19,7 +19,8 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public boolean updateItem(String id, ItemDTO itemDTO, Connection connection) {
-        return false;
+        Item item = new Item(itemDTO.getId(), itemDTO.getName(), itemDTO.getPrice(),itemDTO.getQty());
+        return itemData.update(id, item, connection);
     }
 
     @Override
