@@ -18,8 +18,9 @@ public class CustomerBOImpl implements CustomerBO {
     }
 
     @Override
-    public boolean updateCustomer(CustomerDTO customerDTO) {
-        return false;
+    public boolean updateCustomer(String id, CustomerDTO customerDTO, Connection connection) {
+        Customer customer = new Customer(customerDTO.getId(), customerDTO.getName(), customerDTO.getAddress(), customerDTO.getPhone());
+        return customerData.update(id, customer, connection);
     }
 
     @Override

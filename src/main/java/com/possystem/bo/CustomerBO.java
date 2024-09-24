@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface CustomerBO {
     boolean saveCustomer(CustomerDTO customerDTO, Connection connection);
-    boolean updateCustomer(CustomerDTO customerDTO);
+    boolean updateCustomer(String id, CustomerDTO customerDTO, Connection connection);
     boolean deleteCustomer(String id);
     boolean selectCustomer(String id);
     ArrayList<CustomerDTO> getAllCustomers();

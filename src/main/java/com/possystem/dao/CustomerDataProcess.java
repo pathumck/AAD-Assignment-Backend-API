@@ -54,12 +54,12 @@ public final class CustomerDataProcess implements CustomerData {
     }
 
     @Override
-    public boolean updateCustomer(String id, CustomerDTO customerDTO, Connection connection) {
+    public boolean update(String id, Customer customer, Connection connection) {
         try {
             var ps = connection.prepareStatement(UPDATE_CUSTOMER);
-            ps.setString(1, customerDTO.getName());
-            ps.setString(2, customerDTO.getAddress());
-            ps.setString(3, customerDTO.getPhone());
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getAddress());
+            ps.setString(3, customer.getPhone());
             ps.setString(4, id);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
