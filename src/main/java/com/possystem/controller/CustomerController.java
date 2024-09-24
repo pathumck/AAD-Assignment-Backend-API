@@ -102,8 +102,7 @@ public class CustomerController extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var id = req.getParameter("id");
         try(var writer = resp.getWriter()) {
-            var data = new CustomerDataProcess();
-            if(data.deleteCustomer(id,connection)){
+            if(customerBO.deleteCustomer(id,connection)){
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             }else {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);

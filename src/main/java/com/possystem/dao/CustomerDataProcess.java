@@ -70,7 +70,7 @@ public final class CustomerDataProcess implements CustomerData {
     }
 
     @Override
-    public boolean deleteCustomer(String id, Connection connection) {
+    public boolean delete(String id, Connection connection) {
         try {
             var ps = connection.prepareStatement(DELETE_CUSTOMER);
             ps.setString(1, id);
