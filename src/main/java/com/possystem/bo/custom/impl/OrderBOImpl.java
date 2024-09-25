@@ -1,5 +1,6 @@
-package com.possystem.bo;
+package com.possystem.bo.custom.impl;
 
+import com.possystem.bo.custom.OrderBO;
 import com.possystem.dao.OrderData;
 import com.possystem.dao.OrderDataProcess;
 import com.possystem.dto.PlaceOrderDTO;

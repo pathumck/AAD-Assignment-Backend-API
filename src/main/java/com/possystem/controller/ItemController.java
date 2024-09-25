@@ -1,9 +1,7 @@
 package com.possystem.controller;
 
-import com.possystem.bo.ItemBO;
-import com.possystem.bo.ItemBOImpl;
-import com.possystem.dao.CustomerDataProcess;
-import com.possystem.dao.ItemDataProcess;
+import com.possystem.bo.custom.ItemBO;
+import com.possystem.bo.custom.impl.ItemBOImpl;
 import com.possystem.dto.ItemDTO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;

@@ -1,5 +1,6 @@
-package com.possystem.bo;
+package com.possystem.bo.custom.impl;
 
+import com.possystem.bo.custom.CustomerBO;
 import com.possystem.dao.CustomerData;
 import com.possystem.dao.CustomerDataProcess;
 import com.possystem.dto.CustomerDTO;

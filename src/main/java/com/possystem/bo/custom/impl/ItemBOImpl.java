@@ -1,5 +1,6 @@
-package com.possystem.bo;
+package com.possystem.bo.custom.impl;
 
+import com.possystem.bo.custom.ItemBO;
 import com.possystem.dao.ItemData;
 import com.possystem.dao.ItemDataProcess;
 import com.possystem.dto.ItemDTO;

@@ -1,5 +1,6 @@
-package com.possystem.bo;
+package com.possystem.bo.custom.impl;
 
+import com.possystem.bo.custom.OrderDetailBO;
 import com.possystem.dao.OrderDetailData;
 import com.possystem.dao.OrderDetailDataProcess;
 import com.possystem.dto.tm.CartTM;

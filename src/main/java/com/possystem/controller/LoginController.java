@@ -1,9 +1,7 @@
 package com.possystem.controller;
 
-import com.possystem.bo.LoginBO;
-import com.possystem.bo.LoginBOImpl;
-import com.possystem.dao.LoginData;
-import com.possystem.dao.LoginDataProcess;
+import com.possystem.bo.custom.LoginBO;
+import com.possystem.bo.custom.impl.LoginBOImpl;
 import com.possystem.dto.LoginDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
