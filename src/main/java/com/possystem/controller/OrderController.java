@@ -1,5 +1,6 @@
 package com.possystem.controller;
 
+import com.possystem.bo.BOFactory;
 import com.possystem.bo.custom.ItemBO;
 import com.possystem.bo.custom.OrderBO;
 import com.possystem.bo.custom.OrderDetailBO;
@@ -25,9 +26,9 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/order", loadOnStartup = 2)
 public class OrderController extends HttpServlet {
     Connection connection;
-    OrderBO orderBO = new OrderBOImpl();
-    ItemBO itemBO = new ItemBOImpl();
-    OrderDetailBO orderDetailBO = new OrderDetailBOImpl();
+    OrderBO orderBO = (OrderBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ORDER);
+    ItemBO itemBO = (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
+    OrderDetailBO orderDetailBO = (OrderDetailBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ORDER_DETAILS);
 
     @Override
     public void init() throws ServletException {

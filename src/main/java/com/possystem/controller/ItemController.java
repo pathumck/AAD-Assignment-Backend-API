@@ -1,5 +1,6 @@
 package com.possystem.controller;
 
+import com.possystem.bo.BOFactory;
 import com.possystem.bo.custom.ItemBO;
 import com.possystem.bo.custom.impl.ItemBOImpl;
 import com.possystem.dto.ItemDTO;
@@ -23,7 +24,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/item",loadOnStartup = 2)
 public class ItemController extends HttpServlet {
     Connection connection;
-    ItemBO itemBO = new ItemBOImpl();
+    ItemBO itemBO = (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
 
     @Override
     public void init() throws ServletException {

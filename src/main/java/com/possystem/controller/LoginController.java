@@ -1,5 +1,6 @@
 package com.possystem.controller;
 
+import com.possystem.bo.BOFactory;
 import com.possystem.bo.custom.LoginBO;
 import com.possystem.bo.custom.impl.LoginBOImpl;
 import com.possystem.dto.LoginDTO;
@@ -20,7 +21,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/login", loadOnStartup = 2)
 public class LoginController extends HttpServlet {
     Connection connection;
-    LoginBO loginBO = new LoginBOImpl();
+    LoginBO loginBO = (LoginBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.LOGIN);
 
     @Override
     public void init() throws ServletException {

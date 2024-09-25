@@ -1,5 +1,6 @@
 package com.possystem.controller;
 
+import com.possystem.bo.BOFactory;
 import com.possystem.bo.custom.CustomerBO;
 import com.possystem.bo.custom.impl.CustomerBOImpl;
 import com.possystem.dto.CustomerDTO;
@@ -23,7 +24,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/customer", loadOnStartup = 2)
 public class CustomerController extends HttpServlet {
     Connection connection = null;
-    CustomerBO customerBO = new CustomerBOImpl();
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     @Override
     public void init() throws ServletException {
