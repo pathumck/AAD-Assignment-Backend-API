@@ -15,6 +15,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -26,6 +28,8 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/order", loadOnStartup = 2)
 public class OrderController extends HttpServlet {
     Connection connection;
+    Logger logger = LoggerFactory.getLogger(OrderController.class);
+
     OrderBO orderBO = (OrderBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ORDER);
     ItemBO itemBO = (ItemBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ITEM);
     OrderDetailBO orderDetailBO = (OrderDetailBO) BOFactory.getBOFactory().getBO(BOFactory.BOTypes.ORDER_DETAILS);
@@ -33,6 +37,8 @@ public class OrderController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
+            logger.info("Initializing OrderController with call init method");
+            logger.trace("Error while Initializing OrderController with call init method");
             var ctx = new InitialContext();
             DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/pathumpossystem");
             this.connection = pool.getConnection();
