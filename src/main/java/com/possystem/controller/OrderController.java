@@ -99,11 +99,30 @@ public class OrderController extends HttpServlet {
             if (connection != null) {
                 try {
                     connection.setAutoCommit(true);
-                    connection.close();
+                    //connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/plain");
+
+        try {
+            String newId = orderBO.splitOrderId(connection);
+            if (newId != null) {
+                resp.getWriter().write(newId);
+            } else {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                resp.getWriter().write("Order ID not found");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("Internal server error");
         }
     }
 }
